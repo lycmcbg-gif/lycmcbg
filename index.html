@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewJeans "Cool With You" MV研究问卷结果</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8a2be2 0%, #4b6cb7 100%);
+            color: white;
+            padding: 50px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 100%);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+        
+        .sample-size {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+        }
+        
+        .intro {
+            padding: 40px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+            text-align: center;
+        }
+        
+        .intro p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            padding: 40px 30px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            padding: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .chart-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            font-weight: 600;
+        }
+        
+        .chart-wrapper {
+            height: 320px;
+            position: relative;
+        }
+        
+        .analysis {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 1rem;
+            border-left: 4px solid #8a2be2;
+        }
+        
+        .conclusion {
+            padding: 40px 30px;
+            background: linear-gradient(135deg, #8a2be2 0%, #4b6cb7 100%);
+            color: white;
+            margin-top: 20px;
+        }
+        
+        .conclusion h2 {
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 2rem;
+        }
+        
+        .conclusion-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .point {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease;
+        }
+        
+        .point:hover {
+            transform: translateY(-5px);
+        }
+        
+        .point h3 {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .point h3:before {
+            content: "•";
+            margin-right: 10px;
+            color: #ffcc00;
+            font-size: 1.8rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #6c757d;
+            font-size: 0.95rem;
+            border-top: 1px solid #eaeaea;
+            background: #f8f9fa;
+        }
+        
+        .methodology {
+            padding: 30px;
+            background: #f0f7ff;
+            border-radius: 12px;
+            margin: 20px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        }
+        
+        .methodology h2 {
+            color: #4b6cb7;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        
+        .highlight {
+            color: #8a2be2;
+            font-weight: 600;
+        }
+        
+        .total-respondents {
+            text-align: center;
+            margin: 10px 0 30px;
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+                padding: 20px 15px;
+            }
+            
+            .chart-card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .chart-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NewJeans "Cool With You" MV研究</h1>
+            <p class="subtitle">基于65份有效问卷的数据分析与可视化展示</p>
+            <div class="sample-size">总样本量: 65人</div>
+        </header>
+        
+        <section class="intro">
+            <p>本研究通过问卷调查方式，收集了65位受访者对NewJeans <span class="highlight">"Cool With You"</span> MV创新性的看法。问卷主要围绕MV的叙事结构、视觉符号和跨界合作等方面展开。</p>
+            <p>以下是对关键问题的数据可视化与分析结果，这些数据有力地支持了关于MV创新性的研究论点。</p>
+        </section>
+        
+        <section class="methodology">
+            <h2>研究方法</h2>
+            <p>本研究采用问卷调查法，通过线上平台分发问卷，共收集65份有效样本。问卷设计围绕MV的创新点，涵盖叙事结构、视觉符号和跨界合作三个维度。</p>
+            <p>数据分析采用描述性统计方法，通过饼图可视化展示各问题的选项分布情况。</p>
+        </section>
+        
+        <div class="total-respondents">总受访人数: <strong>65人</strong></div>
+        
+        <section class="charts-container">
+            <div class="chart-card">
+                <h2 class="chart-title">在观看此MV前，您是否是NewJeans的粉丝？</h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart1"></canvas>
+                </div>
+                <div class="analysis">
+                    <p><strong>数据分析：</strong> 52%的受访者对NewJeans仅为初步了解，这增强了研究的客观性，表明对MV创新性的认可并非完全源于粉丝滤镜。</p>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h2 class="chart-title">您如何理解MV中油画《丘比特与普赛克》的作用？</h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart2"></canvas>
+                </div>
+                <div class="analysis">
+                    <p><strong>数据分析：</strong> 83%的受访者认同油画是理解剧情的关键，强有力地验证了MV成功实现了古典艺术与流行文化的嫁接。</p>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h2 class="chart-title">您如何看待NewJeans成员饰演的"旁观天使"角色？</h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart3"></canvas>
+                </div>
+                <div class="analysis">
+                    <p><strong>数据分析：</strong> 72%的受访者认为"旁观天使"角色"比较有趣"，这表明该创新设定成功地引发了观众的兴趣，为其"角色定位创新"提供了数据支持。</p>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h2 class="chart-title">您如何理解梁朝伟出演此次MV的意义？</h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart4"></canvas>
+                </div>
+                <div class="analysis">
+                    <p><strong>数据分析：</strong> 91%的受访者认可梁朝伟的出演提升了MV质感，是成功的跨界合作，这完美支撑了MV在产业合作模式上的创新性。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="conclusion">
+            <h2>研究结论</h2>
+            <div class="conclusion-points">
+                <div class="point">
+                    <h3>受众多样性</h3>
+                    <p>受访者中NewJeans忠实粉丝仅占17%，表明研究结果具有较好的客观性和代表性。</p>
+                </div>
+                <div class="point">
+                    <h3>艺术嫁接成功</h3>
+                    <p>绝大多数观众理解并认可古典油画在MV中的叙事作用，验证了高阶艺术嫁接的有效性。</p>
+                </div>
+                <div class="point">
+                    <h3>角色创新受认可</h3>
+                    <p>NewJeans作为"旁观天使"的创新角色设定获得了观众普遍接受和积极评价。</p>
+                </div>
+                <div class="point">
+                    <h3>跨界合作价值</h3>
+                    <p>梁朝伟的出演被广泛认为是提升MV质感和话题性的成功举措，证明了顶级跨界合作的价值。</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>NewJeans "Cool With You" MV专题研习 &copy; 2023 - 问卷数据可视化与分析 | 总样本量: 65人</p>
+        </footer>
+    </div>
+
+    <script>
+        // 图表数据配置 - 65人样本
+        const chartData = {
+            chart1: {
+                labels: ['仅知道这个组合 (52%)', '听过一些歌，有好感 (26%)', '是，忠实粉丝 (17%)', '完全不了解 (5%)'],
+                data: [34, 17, 11, 3],
+                backgroundColor: ['#8a2be2', '#4b6cb7', '#ff6b6b', '#51cf66']
+            },
+            chart2: {
+                labels: ['点明故事来源，是理解关键 (83%)', '营造氛围，但与剧情联系不深 (9%)', '没有注意到 (5%)', '显得晦涩难懂 (3%)'],
+                data: [54, 6, 3, 2],
+                backgroundColor: ['#8a2be2', '#4b6cb7', '#ff6b6b', '#51cf66']
+            },
+            chart3: {
+                labels: ['比较有趣，增加神秘感 (72%)', '非常新颖，打破常规 (12%)', '略显突兀 (9%)', '没有特别感觉 (7%)'],
+                data: [47, 8, 6, 4],
+                backgroundColor: ['#4b6cb7', '#8a2be2', '#ff6b6b', '#51cf66']
+            },
+            chart4: {
+                labels: ['提升质感和话题性 (91%)', '是推动剧情的关键 (5%)', '主要是制造明星效应 (3%)', '感觉出戏 (1%)'],
+                data: [59, 3, 2, 1],
+                backgroundColor: ['#8a2be2', '#4b6cb7', '#ff6b6b', '#51cf66']
+            }
+        };
+
+        // 初始化所有图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 图表1
+            const ctx1 = document.getElementById('chart1').getContext('2d');
+            new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: chartData.chart1.labels,
+                    datasets: [{
+                        data: chartData.chart1.data,
+                        backgroundColor: chartData.chart1.backgroundColor,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    size: 13
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = 65;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value}人 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '55%'
+                }
+            });
+
+            // 图表2
+            const ctx2 = document.getElementById('chart2').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: chartData.chart2.labels,
+                    datasets: [{
+                        data: chartData.chart2.data,
+                        backgroundColor: chartData.chart2.backgroundColor,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    size: 13
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = 65;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value}人 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '55%'
+                }
+            });
+
+            // 图表3
+            const ctx3 = document.getElementById('chart3').getContext('2d');
+            new Chart(ctx3, {
+                type: 'doughnut',
+                data: {
+                    labels: chartData.chart3.labels,
+                    datasets: [{
+                        data: chartData.chart3.data,
+                        backgroundColor: chartData.chart3.backgroundColor,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    size: 13
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = 65;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value}人 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '55%'
+                }
+            });
+
+            // 图表4
+            const ctx4 = document.getElementById('chart4').getContext('2d');
+            new Chart(ctx4, {
+                type: 'doughnut',
+                data: {
+                    labels: chartData.chart4.labels,
+                    datasets: [{
+                        data: chartData.chart4.data,
+                        backgroundColor: chartData.chart4.backgroundColor,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    size: 13
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = 65;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value}人 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '55%'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
